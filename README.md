@@ -1,64 +1,62 @@
-# demographic_data_analyzer
-import pandas as pd
+# 📊 Demographic Data Analyzer
 
-def calculate_demographic_data(print_data=True):
-    # Read data from file
-    df = pd.read_csv('adult.data.csv')
+## Overview
 
-    # How many of each race are represented in this dataset?
-    race_count = df['race'].value_counts()
+This project performs an in-depth analysis of demographic data extracted from the **1994 U.S. Census** using **Python and Pandas**. It answers a variety of real-world socio-economic questions related to **age, education, income, work hours, occupation, and nationality**.
 
-    # What is the average age of men?
-    average_age_men = round(df[df['sex'] == 'Male']['age'].mean(), 1)
+As a **data scientist**, this project showcases proficiency in:
+- Cleaning and transforming real-world datasets
+- Extracting statistical insights from categorical and numerical data
+- Leveraging Python (Pandas) for exploratory data analysis (EDA)
 
-    # What is the percentage of people who have a Bachelor's degree?
-    percentage_bachelors = round((len(df[df['education'] == 'Bachelors']) / len(df)) * 100, 1)
+---
 
-    # What percentage of people with advanced education (Bachelors, Masters, or Doctorate) make more than 50K?
-    advanced_education = df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])
-    higher_education_rich = round((df[advanced_education & (df['salary'] == '>50K')].shape[0] / df[advanced_education].shape[0]) * 100, 1)
+## 👨🏽‍💻 Author
 
-    # What percentage of people without advanced education make more than 50K?
-    lower_education = ~df['education'].isin(['Bachelors', 'Masters', 'Doctorate'])
-    lower_education_rich = round((df[lower_education & (df['salary'] == '>50K')].shape[0] / df[lower_education].shape[0]) * 100, 1)
+**Eniitan Oluwatoyin Shadrack**  
+_Data Scientist | Lecturer | Community Health Data Analyst_  
+📫 `oluwatoyin.eniitan2020@gmail.com`
 
-    # What is the minimum number of hours a person works per week?
-    min_work_hours = df['hours-per-week'].min()
+---
 
-    # What percentage of the people who work the minimum number of hours per week have a salary of more than 50K?
-    num_min_workers = df[df['hours-per-week'] == min_work_hours]
-    rich_percentage = round((num_min_workers[num_min_workers['salary'] == '>50K'].shape[0] / num_min_workers.shape[0]) * 100, 1)
+## 📂 Dataset
 
-    # What country has the highest percentage of people that earn >50K?
-    country_earning_above_50k = df[df['salary'] == '>50K'].groupby('native-country').size()
-    country_total = df.groupby('native-country').size()
-    highest_earning_country_percentage = round((country_earning_above_50k / country_total * 100).max(), 1)
-    highest_earning_country = (country_earning_above_50k / country_total * 100).idxmax()
+- Source: [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/adult)
+- Title: Adult Income Dataset
+- Description: Data was extracted from the 1994 U.S. Census database
+- Format: CSV (`adult.data.csv`)
 
-    # Identify the most popular occupation for those who earn >50K in India.
-    top_IN_occupation = df[(df['native-country'] == 'India') & (df['salary'] == '>50K')]['occupation'].value_counts().idxmax()
+---
 
-    if print_data:
-        print("Number of each race:\n", race_count)
-        print("Average age of men:", average_age_men)
-        print(f"Percentage with Bachelors degrees: {percentage_bachelors}%")
-        print(f"Percentage with higher education that earn >50K: {higher_education_rich}%")
-        print(f"Percentage without higher education that earn >50K: {lower_education_rich}%")
-        print(f"Min work time: {min_work_hours} hours/week")
-        print(f"Percentage of rich among those who work fewest hours: {rich_percentage}%")
-        print("Country with highest percentage of rich:", highest_earning_country)
-        print(f"Highest percentage of rich people in country: {highest_earning_country_percentage}%")
-        print("Top occupations in India:", top_IN_occupation)
+## 🧠 Questions Answered
 
-    return {
-        'race_count': race_count,
-        'average_age_men': average_age_men,
-        'percentage_bachelors': percentage_bachelors,
-        'higher_education_rich': higher_education_rich,
-        'lower_education_rich': lower_education_rich,
-        'min_work_hours': min_work_hours,
-        'rich_percentage': rich_percentage,
-        'highest_earning_country': highest_earning_country,
-        'highest_earning_country_percentage': highest_earning_country_percentage,
-        'top_IN_occupation': top_IN_occupation
-    }
+1. 📈 How many people of each race are represented in this dataset?
+2. 👨 What is the average age of men?
+3. 🎓 What percentage of people have a Bachelor's degree?
+4. 💼 What percentage of people with **advanced education** (Bachelors, Masters, Doctorate) earn more than 50K?
+5. 📉 What percentage of people **without advanced education** earn more than 50K?
+6. ⏱️ What is the **minimum number of work hours** per week?
+7. 💰 What percentage of those working **minimum hours** earn more than 50K?
+8. 🌍 Which **country has the highest percentage** of people earning more than 50K?
+9. 🇮🇳 What is the **most common occupation** among those earning >50K in **India**?
+
+---
+
+## 🧪 Sample Output (Abbreviated)
+
+```python
+{
+  'race_count': White    27816
+                Black     3124
+                Asian     1039
+                ...
+  'average_age_men': 39.4,
+  'percentage_bachelors': 16.4,
+  'higher_education_rich': 46.5,
+  'lower_education_rich': 17.0,
+  'min_work_hours': 1,
+  'rich_percentage_min_hours': 10.0,
+  'highest_earning_country': 'India',
+  'highest_earning_country_percentage': 41.9,
+  'top_IN_occupation': 'Prof-specialty'
+}
